@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Expense Tracker</h1>
+            <p id="welcomeMessage"></p>
+            <button id="logoutButton">Logout</button>
+        </header>
+        <section>
+    <h2>Spending Summary</h2>
+
+    <p>
+        Total Spending:
+        <strong id="totalSpending">₹0.00</strong>
+    </p>
+</section>
+<section>
+    <h3>Spending by Category</h3>
+
+    <ul id="categorySummary"></ul>
+   
+    <div class="chart-container">
+    <canvas id="categoryChart"></canvas>
+</div>
+
+</section>
+<section>
+    <h3>Spending by Month</h3>
+
+    <ul id="monthlySummary"></ul>
+    <section>
+    <h3>Spending by Month</h3>
+
+    <ul id="monthlySummary"></ul>
+
+    <div class="chart-container">
+        <canvas id="monthlyChart"></canvas>
+    </div>
+</section>
+</section>
+
+        <section>
+    <h2>Add Expense</h2>
+
+    <form id="expenseForm">
+        <div>
+            <label for="amount">Amount</label>
+            <input
+                type="number"
+                id="amount"
+                name="amount"
+                step="0.01"
+                min="0.01"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="category">Category</label>
+            <input
+                type="text"
+                id="category"
+                name="category"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="description">Description</label>
+            <input
+                type="text"
+                id="description"
+                name="description"
+            >
+        </div>
+
+        <div>
+            <label for="date">Date</label>
+            <input
+                type="date"
+                id="date"
+                name="date"
+                required
+            >
+        </div>
+        <button type="submit" id="expenseSubmitButton">
+    Add Expense
+</button>
+
+<button type="button" id="cancelEditButton" hidden>
+    Cancel
+</button>
+        
+
+    <p id="expenseFormMessage"></p>
+</section>
+        <section>
+            <h2>Your Expenses</h2>
+
+            <p id="message"></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="expensesTableBody"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
