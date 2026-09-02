@@ -312,7 +312,30 @@ app.delete("/api/expenses/:id", requireAuth, async (req, res) => {
 });
 app.post("/api/auth/register", async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { fullName, nickname, username, password } = req.body;
+        if (typeof fullName !== "string" || fullName.trim() === "") {
+    return res.status(400).json({
+        error: "Full name is required",
+    });
+}
+
+if (fullName.trim().length > 100) {
+    return res.status(400).json({
+        error: "Full name must be 100 characters or fewer",
+    });
+}
+
+if (typeof nickname !== "string" || nickname.trim() === "") {
+    return res.status(400).json({
+        error: "Nickname is required",
+    });
+}
+
+if (nickname.trim().length > 50) {
+    return res.status(400).json({
+        error: "Nickname must be 50 characters or fewer",
+    });
+}
         if (typeof username !== "string" || username.trim() === "") {
     return res.status(400).json({
         error: "Username is required",
@@ -338,10 +361,16 @@ if (typeof password !== "string" || password.length < 8) {
 
         const passwordHash = await bcrypt.hash(password, 10);
 
-        const [result] = await db.execute(
-            "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-            [username, passwordHash]
-        );
+       const [result] = await db.execute(
+    `INSERT INTO users (full_name, nickname, username, password_hash)
+     VALUES (?, ?, ?, ?)`,
+    [
+        fullName.trim(),
+        nickname.trim(),
+        username.trim(),
+        passwordHash,
+    ]
+);
 
         res.status(201).json({
             id: result.insertId,
@@ -361,7 +390,7 @@ app.post("/api/auth/login", loginLimiter, async (req, res) => {
         const { username, password } = req.body;
 
         const [users] = await db.execute(
-            "SELECT id, username, password_hash FROM users WHERE username = ?",
+            "SELECT * FROM users WHERE username = ?",
             [username]
         );
 
@@ -385,13 +414,16 @@ app.post("/api/auth/login", loginLimiter, async (req, res) => {
         }
 req.session.userId = user.id;
 
-        res.json({
-            message: "Login successful",
-            user: {
-                id: user.id,
-                username: user.username,
-            },
-        });
+       res.json({
+    message: "Login successful",
+    user: {
+        id: user.id,
+        username: user.username,
+        fullName: user.full_name,
+        nickname: user.nickname
+    }
+});
+        
     } catch (error) {
         console.error("Error logging in:", error.message);
 

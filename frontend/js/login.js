@@ -1,52 +1,97 @@
 const loginForm = document.getElementById("loginForm");
-const message = document.getElementById("message");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const passwordToggle = document.getElementById("passwordToggle");
+const messageElement = document.getElementById("message");
+const loginButton = document.getElementById("loginButton");
 
-loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    const validationError = validateLogin(username, password);
-
-if (validationError) {
-    message.textContent = validationError;
-    return;
+function setMessage(message, type = "error") {
+    messageElement.textContent = message;
+    messageElement.dataset.type = type;
 }
-    function validateLogin(username, password) {
-    if (!username.trim()) {
-        return "Username is required.";
+
+function setLoading(isLoading) {
+    loginButton.disabled = isLoading;
+    loginButton.classList.toggle("is-loading", isLoading);
+}
+
+function togglePasswordVisibility() {
+    const isPassword = passwordInput.type === "password";
+
+    passwordInput.type = isPassword ? "text" : "password";
+    passwordToggle.textContent = isPassword ? "Hide" : "Show";
+    passwordToggle.setAttribute(
+        "aria-label",
+        isPassword ? "Hide password" : "Show password"
+    );
+    passwordToggle.setAttribute(
+        "aria-pressed",
+        String(isPassword)
+    );
+}
+
+function validateLoginForm() {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username) {
+        return "Username is required";
     }
 
     if (!password) {
-        return "Password is required.";
+        return "Password is required";
     }
 
     return null;
 }
+
+async function loginUser(event) {
+    event.preventDefault();
+
+    setMessage("");
+
+    const validationError = validateLoginForm();
+
+    if (validationError) {
+        setMessage(validationError);
+        return;
+    }
+
+    setLoading(true);
+
     try {
         const response = await fetch("/api/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({
-                username,
-                password,
+                username: usernameInput.value.trim(),
+                password: passwordInput.value,
             }),
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            message.textContent = data.error;
-            return;
+            throw new Error(data.error || "Invalid username or password");
         }
 
-        message.textContent = "Login successful!";
+        setMessage("Login successful. Opening your dashboard...", "success");
 
-        window.location.href = "/dashboard";
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 500);
     } catch (error) {
         console.error("Login error:", error);
-        message.textContent = "Unable to connect to server.";
+
+        setMessage(error.message || "Unable to sign in");
+    } finally {
+        setLoading(false);
     }
-});
+}
+
+passwordToggle.addEventListener("click", togglePasswordVisibility);
+
+loginForm.addEventListener("submit", loginUser);

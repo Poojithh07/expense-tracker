@@ -3,42 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Expense Tracker</title>
+
+    <meta
+        name="description"
+        content="Sign in to your Expense Tracker account."
+    >
+
+    <title>Sign In | Expense Tracker</title>
+
+    <link rel="stylesheet" href="css/login.css">
 </head>
+
 <body>
-    <main>
-        <h1>Login</h1>
-
-        <form id="loginForm">
-            <div>
-                <label for="username">Username</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    required
-                >
+    <main class="auth-page">
+        <section class="auth-visual" aria-label="Expense Tracker introduction">
+            <div class="brand">
+                <span class="brand-mark" aria-hidden="true">₹</span>
+                <span>Expense Tracker</span>
             </div>
 
-            <div>
-                <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    required
-                >
+            <div class="visual-content">
+                <span class="eyebrow">YOUR MONEY. YOUR CONTROL.</span>
+
+                <h1>
+                    Know where
+                    <span>every rupee goes.</span>
+                </h1>
+
+                <p>
+                    Stay on top of your spending with a clear,
+                    simple view of your financial habits.
+                </p>
+
+                <div class="visual-stat">
+                    <span class="stat-icon" aria-hidden="true">₹</span>
+
+                    <div>
+                        <strong>Spend smarter.</strong>
+                        <span>Track every expense effortlessly.</span>
+                    </div>
+                </div>
             </div>
 
-            <button type="submit">Login</button>
-        </form>
+            <div class="visual-decoration" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </section>
 
-        <p id="message"></p>
+        <section class="auth-panel">
+            <div class="auth-container">
+                <div class="mobile-brand">
+                    <span class="brand-mark" aria-hidden="true">₹</span>
+                    <span>Expense Tracker</span>
+                </div>
 
-        <p>
-            Don't have an account?
-            <a href="/register">Register</a>
-        </p>
+                <header class="form-header">
+                    <span class="form-eyebrow">WELCOME BACK</span>
+
+                    <h2>Sign in</h2>
+
+                    <p>
+                        Enter your details to access your dashboard.
+                    </p>
+                </header>
+
+                <form id="loginForm" novalidate>
+                    <div class="field">
+                        <label for="username">Username</label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            maxlength="50"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                maxlength="128"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                                aria-label="Show password"
+                                aria-pressed="false"
+                            >
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="form-message"
+                        id="message"
+                        role="alert"
+                        aria-live="polite"
+                    ></div>
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                        id="loginButton"
+                    >
+                        <span class="button-text">Sign in</span>
+
+                        <span
+                            class="button-spinner"
+                            aria-hidden="true"
+                        ></span>
+                    </button>
+                </form>
+
+                <p class="auth-switch">
+                    Don't have an account?
+                    <a href="register.html">Create Account</a>
+                </p>
+            </div>
+        </section>
     </main>
 
     <script src="js/login.js"></script>

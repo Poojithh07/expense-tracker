@@ -2,126 +2,509 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Expense Tracker</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Expense Tracker dashboard"
+    >
+
+    <title>Dashboard | Expense Tracker</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
+
 <body>
-    <main>
-        <header>
-            <h1>Expense Tracker</h1>
-            <p id="welcomeMessage"></p>
-            <button id="logoutButton">Logout</button>
-        </header>
-        <section>
-    <h2>Spending Summary</h2>
+    <div class="app-shell">
 
-    <p>
-        Total Spending:
-        <strong id="totalSpending">₹0.00</strong>
-    </p>
-</section>
-<section>
-    <h3>Spending by Category</h3>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <a class="brand" href="dashboard.html">
+                    <span class="brand-mark" aria-hidden="true">₹</span>
 
-    <ul id="categorySummary"></ul>
-   
-    <div class="chart-container">
-    <canvas id="categoryChart"></canvas>
-</div>
+                    <span class="brand-name">
+                        Expense Tracker
+                    </span>
+                </a>
 
-</section>
-<section>
-    <h3>Spending by Month</h3>
+                <button
+                    type="button"
+                    class="sidebar-close"
+                    id="sidebarClose"
+                    aria-label="Close navigation"
+                >
+                    ×
+                </button>
+            </div>
 
-    <ul id="monthlySummary"></ul>
-    <section>
-    <h3>Spending by Month</h3>
+            <nav class="navigation" aria-label="Main navigation">
+                <a
+                    href="#overview"
+                    class="nav-item active"
+                    data-section="overview"
+                >
+                    <span class="nav-icon" aria-hidden="true">⌂</span>
+                    <span>Overview</span>
+                </a>
 
-    <ul id="monthlySummary"></ul>
+                <a
+                    href="#expenses"
+                    class="nav-item"
+                    data-section="expenses"
+                >
+                    <span class="nav-icon" aria-hidden="true">₹</span>
+                    <span>Expenses</span>
+                </a>
 
-    <div class="chart-container">
-        <canvas id="monthlyChart"></canvas>
+                <a
+                    href="#analytics"
+                    class="nav-item"
+                    data-section="analytics"
+                >
+                    <span class="nav-icon" aria-hidden="true">◔</span>
+                    <span>Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-profile">
+                    <div
+                        class="profile-avatar"
+                        id="sidebarAvatar"
+                    >
+                        U
+                    </div>
+
+                    <div class="sidebar-profile-info">
+                        <strong id="sidebarNickname">
+                            User
+                        </strong>
+
+                        <span id="sidebarUsername">
+                            username
+                        </span>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logoutButton"
+                >
+                    <span aria-hidden="true">↪</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button
+                    type="button"
+                    class="menu-button"
+                    id="menuButton"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div class="topbar-spacer"></div>
+
+                <div class="topbar-profile">
+                    <div
+                        class="profile-avatar"
+                        id="topbarAvatar"
+                    >
+                        U
+                    </div>
+
+                    <div class="topbar-profile-text">
+                        <span>Signed in as</span>
+                        <strong id="topbarNickname">User</strong>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-container">
+
+                <section
+                    class="hero-section"
+                    id="overview"
+                >
+                    <div>
+                        <span class="section-eyebrow">
+                            SPENDING OVERVIEW
+                        </span>
+
+                        <h1 id="welcomeHeading">
+                            Good afternoon, User 👋
+                        </h1>
+
+                        <p>
+                            Here's a clear view of your spending.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="heroAddExpenseButton"
+                    >
+                        <span aria-hidden="true">+</span>
+                        Add expense
+                    </button>
+                </section>
+
+                <section
+                    class="summary-grid"
+                    aria-label="Spending summary"
+                >
+                    <article class="summary-card summary-card-primary">
+                        <div class="summary-card-top">
+                            <span class="summary-label">
+                                Total spending
+                            </span>
+
+                            <span
+                                class="summary-icon"
+                                aria-hidden="true"
+                            >
+                                ₹
+                            </span>
+                        </div>
+
+                        <strong
+                            class="summary-value"
+                            id="totalSpending"
+                        >
+                            ₹0.00
+                        </strong>
+
+                        <span class="summary-description">
+                            Across all your expenses
+                        </span>
+                    </article>
+
+                    <article class="summary-card">
+                        <div class="summary-card-top">
+                            <span class="summary-label">
+                                Transactions
+                            </span>
+
+                            <span
+                                class="summary-icon"
+                                aria-hidden="true"
+                            >
+                                #
+                            </span>
+                        </div>
+
+                        <strong
+                            class="summary-value"
+                            id="transactionCount"
+                        >
+                            0
+                        </strong>
+
+                        <span class="summary-description">
+                            Recorded expenses
+                        </span>
+                    </article>
+
+                    <article class="summary-card">
+                        <div class="summary-card-top">
+                            <span class="summary-label">
+                                Top category
+                            </span>
+
+                            <span
+                                class="summary-icon"
+                                aria-hidden="true"
+                            >
+                                ◈
+                            </span>
+                        </div>
+
+                        <strong
+                            class="summary-value summary-value-category"
+                            id="topCategory"
+                        >
+                            —
+                        </strong>
+
+                        <span class="summary-description">
+                            Highest spending category
+                        </span>
+                    </article>
+                </section>
+
+                <section
+                    class="charts-grid"
+                    id="analytics"
+                >
+                    <article class="panel monthly-panel">
+                        <div class="panel-header">
+                            <div>
+                                <span class="panel-eyebrow">
+                                    TREND
+                                </span>
+
+                                <h2>Monthly spending</h2>
+
+                                <p>
+                                    Your spending over time
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="chart-container chart-container-large">
+                            <canvas id="monthlyChart"></canvas>
+
+                            <div
+                                class="chart-empty"
+                                id="monthlyChartEmpty"
+                                hidden
+                            >
+                                No monthly spending data yet.
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="panel category-panel">
+                        <div class="panel-header">
+                            <div>
+                                <span class="panel-eyebrow">
+                                    BREAKDOWN
+                                </span>
+
+                                <h2>By category</h2>
+
+                                <p>
+                                    Where your money goes
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="chart-container chart-container-small">
+                            <canvas id="categoryChart"></canvas>
+
+                            <div
+                                class="chart-empty"
+                                id="categoryChartEmpty"
+                                hidden
+                            >
+                                No category data yet.
+                            </div>
+                        </div>
+
+                        <div
+                            class="category-list"
+                            id="categoryList"
+                        ></div>
+                    </article>
+                </section>
+
+                <section
+                    class="expenses-section"
+                    id="expenses"
+                >
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">
+                                TRANSACTIONS
+                            </span>
+
+                            <h2>Recent expenses</h2>
+
+                            <p>
+                                Keep track of where your money goes.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="secondary-button"
+                            id="sectionAddExpenseButton"
+                        >
+                            <span aria-hidden="true">+</span>
+                            Add expense
+                        </button>
+                    </div>
+
+                    <div class="expense-table-wrapper">
+                        <table class="expense-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="expenseTableBody">
+                                <tr>
+                                    <td
+                                        colspan="5"
+                                        class="table-state"
+                                    >
+                                        Loading expenses...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div
+                        class="mobile-expenses"
+                        id="mobileExpenses"
+                    ></div>
+                </section>
+
+            </div>
+        </main>
     </div>
-</section>
-</section>
 
-        <section>
-    <h2>Add Expense</h2>
+    <div
+        class="modal-backdrop"
+        id="expenseModal"
+        hidden
+    >
+        <section
+            class="expense-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="expenseModalTitle"
+        >
+            <div class="modal-header">
+                <div>
+                    <span class="panel-eyebrow">
+                        EXPENSE
+                    </span>
 
-    <form id="expenseForm">
-        <div>
-            <label for="amount">Amount</label>
-            <input
-                type="number"
-                id="amount"
-                name="amount"
-                step="0.01"
-                min="0.01"
-                required
-            >
-        </div>
+                    <h2 id="expenseModalTitle">
+                        Add expense
+                    </h2>
+                </div>
 
-        <div>
-            <label for="category">Category</label>
-            <input
-                type="text"
-                id="category"
-                name="category"
-                required
-            >
-        </div>
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="modalClose"
+                    aria-label="Close expense form"
+                >
+                    ×
+                </button>
+            </div>
 
-        <div>
-            <label for="description">Description</label>
-            <input
-                type="text"
-                id="description"
-                name="description"
-            >
-        </div>
+            <form id="expenseForm" novalidate>
+                <input
+                    type="hidden"
+                    id="expenseId"
+                >
 
-        <div>
-            <label for="date">Date</label>
-            <input
-                type="date"
-                id="date"
-                name="date"
-                required
-            >
-        </div>
-        <button type="submit" id="expenseSubmitButton">
-    Add Expense
-</button>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="amount">
+                            Amount
+                        </label>
 
-<button type="button" id="cancelEditButton" hidden>
-    Cancel
-</button>
-        
+                        <div class="amount-input">
+                            <span aria-hidden="true">₹</span>
 
-    <p id="expenseFormMessage"></p>
-</section>
-        <section>
-            <h2>Your Expenses</h2>
+                            <input
+                                type="number"
+                                id="amount"
+                                name="amount"
+                                min="0.01"
+                                step="0.01"
+                                placeholder="0.00"
+                                required
+                            >
+                        </div>
+                    </div>
 
-            <p id="message"></p>
+                    <div class="form-field">
+                        <label for="category">
+                            Category
+                        </label>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+                        <input
+                            type="text"
+                            id="category"
+                            name="category"
+                            maxlength="50"
+                            placeholder="Food, transport..."
+                            required
+                        >
+                    </div>
 
-                <tbody id="expensesTableBody"></tbody>
-            </table>
+                    <div class="form-field form-field-full">
+                        <label for="description">
+                            Description
+                        </label>
+
+                        <input
+                            type="text"
+                            id="description"
+                            name="description"
+                            maxlength="255"
+                            placeholder="What was this expense for?"
+                        >
+                    </div>
+
+                    <div class="form-field form-field-full">
+                        <label for="date">
+                            Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="date"
+                            name="date"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div
+                    class="form-message"
+                    id="expenseMessage"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+                <div class="modal-actions">
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="modalCancel"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="saveExpenseButton"
+                    >
+                        Save expense
+                    </button>
+                </div>
+            </form>
         </section>
-    </main>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 </html>
