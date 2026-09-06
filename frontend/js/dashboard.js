@@ -560,11 +560,11 @@ function populateCategoryFilter() {
     }
 }
 function renderExpenses(expenses = state.expenses) {
-    if (!state.expenses.length) {
+    if (!expenses.length) {
         elements.expenseTableBody.innerHTML = `
             <tr>
                 <td colspan="5" class="table-state">
-                    No expenses yet. Add your first expense.
+                    No expenses match your filters.
                 </td>
             </tr>
         `;
@@ -572,7 +572,7 @@ function renderExpenses(expenses = state.expenses) {
         elements.mobileExpenses.innerHTML = `
             <div class="mobile-expense-card">
                 <div class="table-state">
-                    No expenses yet. Add your first expense.
+                    No expenses match your filters.
                 </div>
             </div>
         `;
@@ -580,11 +580,11 @@ function renderExpenses(expenses = state.expenses) {
         return;
     }
 
-    elements.expenseTableBody.innerHTML = state.expenses
+    elements.expenseTableBody.innerHTML = expenses
         .map(renderExpenseRow)
         .join("");
 
-    elements.mobileExpenses.innerHTML = state.expenses
+    elements.mobileExpenses.innerHTML = expenses
         .map(renderMobileExpense)
         .join("");
 }
