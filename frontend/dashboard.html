@@ -46,6 +46,7 @@
                     class="nav-item active"
                     data-section="overview"
                 >
+                
                     <span class="nav-icon" aria-hidden="true">⌂</span>
                     <span>Overview</span>
                 </a>
@@ -338,6 +339,39 @@
                             Add expense
                         </button>
                     </div>
+                    <div class="expense-tools">
+    <div class="expense-search">
+        <span class="expense-search-icon" aria-hidden="true">⌕</span>
+
+        <input
+            type="search"
+            id="expenseSearch"
+            placeholder="Search expenses..."
+            autocomplete="off"
+            aria-label="Search expenses"
+        >
+    </div>
+
+    <select
+        id="categoryFilter"
+        class="category-filter"
+        aria-label="Filter expenses by category"
+    >
+        <option value="">All categories</option>
+    </select>
+    <button
+    type="button"
+    class="clear-filters-button"
+    id="clearExpenseFilters"
+>
+    Clear
+</button>
+</div>
+<div class="expense-results-info">
+    <span id="expenseResultsCount">
+        Showing 0 expenses
+    </span>
+</div>
 
                     <div class="expense-table-wrapper">
                         <table class="expense-table">

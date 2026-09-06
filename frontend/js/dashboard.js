@@ -23,7 +23,14 @@ const elements = {
     totalSpending: document.getElementById("totalSpending"),
     transactionCount: document.getElementById("transactionCount"),
     topCategory: document.getElementById("topCategory"),
-
+    expenseSearch: document.getElementById("expenseSearch"),
+    expenseCategoryFilter: document.getElementById("categoryFilter"),
+    clearExpenseFilters: document.getElementById(
+    "clearExpenseFilters"
+),
+expenseResultsCount: document.getElementById(
+    "expenseResultsCount"
+),
     monthlyChart: document.getElementById("monthlyChart"),
     monthlyChartEmpty: document.getElementById("monthlyChartEmpty"),
 
@@ -47,7 +54,7 @@ const elements = {
     date: document.getElementById("date"),
     expenseMessage: document.getElementById("expenseMessage"),
     saveExpenseButton: document.getElementById("saveExpenseButton"),
-
+    
     heroAddExpenseButton: document.getElementById(
         "heroAddExpenseButton"
     ),
@@ -197,8 +204,10 @@ async function loadExpenses() {
             ? data
             : data.expenses || [];
 
-        renderExpenses();
+        
         updateTransactionCount();
+        populateCategoryFilter();
+        applyExpenseFilters();
     } catch (error) {
         console.error("Unable to load expenses:", error);
 
@@ -466,7 +475,25 @@ elements.categoryChartEmpty.hidden = hasCategoryValues;
         },
     });
 }
+function filterExpenses(expenses, searchTerm) {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
 
+    if (!normalizedSearch) {
+        return expenses;
+    }
+
+    return expenses.filter((expense) => {
+        const category = String(expense.category || "").toLowerCase();
+        const description = String(
+            expense.description || ""
+        ).toLowerCase();
+
+        return (
+            category.includes(normalizedSearch) ||
+            description.includes(normalizedSearch)
+        );
+    });
+}
 function renderCategoryList(categories) {
     if (!categories.length) {
         elements.categoryList.innerHTML = "";
@@ -501,8 +528,38 @@ function renderCategoryList(categories) {
         })
         .join("");
 }
+function populateCategoryFilter() {
+    const categories = [
+        ...new Set(
+            state.expenses
+                .map((expense) =>
+                    String(expense.category || "").trim()
+                )
+                .filter(Boolean)
+        ),
+    ].sort((first, second) =>
+        first.localeCompare(second)
+    );
 
-function renderExpenses() {
+    const currentValue =
+        elements.expenseCategoryFilter.value;
+
+    elements.expenseCategoryFilter.innerHTML = `
+        <option value="">All categories</option>
+        ${categories
+            .map(
+                (category) =>
+                    `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+            )
+            .join("")}
+    `;
+
+    if (categories.includes(currentValue)) {
+        elements.expenseCategoryFilter.value =
+            currentValue;
+    }
+}
+function renderExpenses(expenses = state.expenses) {
     if (!state.expenses.length) {
         elements.expenseTableBody.innerHTML = `
             <tr>
@@ -1004,6 +1061,60 @@ function setupScrollNavigation() {
 
     sections.forEach((section) => observer.observe(section));
 }
+function applyExpenseFilters() {
+    const searchTerm = elements.expenseSearch.value
+        .trim()
+        .toLowerCase();
+
+    const selectedCategory =
+        elements.expenseCategoryFilter.value
+            .trim()
+            .toLowerCase();
+
+    const filteredExpenses = state.expenses.filter((expense) => {
+        const category = String(
+            expense.category || ""
+        ).toLowerCase();
+
+        const description = String(
+            expense.description || ""
+        ).toLowerCase();
+
+        const matchesSearch =
+            !searchTerm ||
+            category.includes(searchTerm) ||
+            description.includes(searchTerm);
+
+        const matchesCategory =
+            !selectedCategory ||
+            category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+    });
+
+    elements.expenseResultsCount.textContent =
+        `Showing ${filteredExpenses.length} of ${state.expenses.length} expenses`;
+
+    renderExpenses(filteredExpenses);
+}
+expenseSearch.addEventListener(
+    "input",
+    applyExpenseFilters
+);
+
+elements.expenseCategoryFilter.addEventListener(
+    "change",
+    applyExpenseFilters
+);
+elements.clearExpenseFilters.addEventListener(
+    "click",
+    () => {
+        elements.expenseSearch.value = "";
+        elements.expenseCategoryFilter.value = "";
+
+        applyExpenseFilters();
+    }
+);
 setupSectionNavigation();
 setupScrollNavigation();
 
